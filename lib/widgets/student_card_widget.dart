@@ -17,6 +17,8 @@ class StudentCardWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(children: [
 
+        StudentItemInfoWidget(title: 'ID', value: student.id.toString()),
+
         StudentItemInfoWidget(title: 'Name', value: student.name),
         StudentItemInfoWidget(title: 'Email', value: student.email),
         StudentItemInfoWidget(title: 'Mobile', value: student.mobile),

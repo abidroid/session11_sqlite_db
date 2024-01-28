@@ -88,17 +88,18 @@ class DatabaseHelper {
       students.add(student);
     }
 
-    await Future.delayed(const Duration(seconds: 2));
+    //await Future.delayed(const Duration(seconds: 2));
 
     return students;
   }
   //
-  // // delete
-  // Future<int> deleteDog(int id) async {
-  //   Database db = await instance.database;
-  //   int result = await db.delete('tbl_dog', where: 'id=?', whereArgs: [id]);
-  //   return result;
-  // }
+  // delete
+  Future<int> deleteStudent(int id) async {
+    Database db = await instance.database;
+    int result = await db.rawDelete('DELETE FROM $tableStudent where id=?', [id]);
+    //int result = await db.delete(tableStudent, where: 'id=?', whereArgs: [id]);
+    return result;
+  }
   //
   // // update
   // Future<int> updateDog(Dog dog) async {

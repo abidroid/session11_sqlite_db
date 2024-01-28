@@ -155,6 +155,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                       if( result > 0 ){
                         print(result);
                         Fluttertoast.showToast(msg: 'Record Saved', backgroundColor: Colors.green);
+
+                        formKey.currentState!.reset();
                       }else{
                         print(result);
                         Fluttertoast.showToast(msg: 'Failed', backgroundColor: Colors.red);
