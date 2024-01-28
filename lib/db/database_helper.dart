@@ -70,22 +70,28 @@ class DatabaseHelper {
     return result;
   }
 
-  // // read operation
-  // Future<List<Dog>> getAllDogs() async {
-  //   List<Dog> dogs = [];
-  //
-  //   Database db = await instance.database;
-  //
-  //   // read data from table
-  //   List<Map<String, dynamic>> listMap = await db.query('tbl_dog');
-  //
-  //   for (var dogMap in listMap) {
-  //     Dog dog = Dog.fromMap(dogMap);
-  //     dogs.add(dog);
-  //   }
-  //
-  //   return dogs;
-  // }
+  // read operation
+  Future<List<Student>> getAllStudents() async {
+    List<Student> students = [];
+
+    Database db = await instance.database;
+
+    // read data from table
+    // we will get list of maps
+    List<Map<String, dynamic>> listMap = await db.query(tableStudent);
+
+   // List<Map<String, dynamic>> listOfStudents = await db.rawQuery('SELECT * from $tableStudent');
+
+    // converting map to object and then adding to the list
+    for (var studentMap in listMap) {
+      Student student = Student.fromMap(studentMap);
+      students.add(student);
+    }
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    return students;
+  }
   //
   // // delete
   // Future<int> deleteDog(int id) async {
