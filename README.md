@@ -10,8 +10,11 @@ A few resources to get you started if this is your first Flutter project:
 
 <h2>Assignments</h2>
 - Validate Email, Mobile TextFields
+<br/>
 - Convert Uni TextField to DropDown with 10 universities
+<br/>
 - Redesign the Student Card widget with your own creativity
+<br/>
 - Upload project to github
 
 <h3>Note</h3>
