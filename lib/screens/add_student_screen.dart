@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:session11_sqlite_db/db/database_helper.dart';
+import 'package:session11_sqlite_db/models/student.dart';
 import 'package:session11_sqlite_db/screens/student_list_screen.dart';
 import 'package:session11_sqlite_db/utility/data_store.dart';
 
@@ -10,14 +13,11 @@ class AddStudentScreen extends StatefulWidget {
 }
 
 class _AddStudentScreenState extends State<AddStudentScreen> {
-
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  late String name, email,mobile, uni;
+  late String name, email, mobile, uni;
 
   String _selectedCourse = courses[0];
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,13 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
           key: formKey,
           child: ListView(
             children: [
-
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Name',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -46,15 +45,16 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Email',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -62,14 +62,16 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Mobile',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -77,12 +79,13 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               DropdownButtonFormField(
                 value: _selectedCourse,
                 decoration: const InputDecoration(
-                  border:  OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                 ),
                 isExpanded: true,
                 onChanged: (value) {
@@ -102,8 +105,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     return null;
                   }
                 },
-                items: courses
-                    .map((String val) {
+                items: courses.map((String val) {
                   return DropdownMenuItem(
                     value: val,
                     child: Text(
@@ -112,14 +114,16 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   );
                 }).toList(),
               ),
-
-              const SizedBox(height: 16,),TextFormField(
+              const SizedBox(
+                height: 16,
+              ),
+              TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Uni',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -127,35 +131,50 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: (){
-
-                    if( formKey.currentState!.validate()){
-
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
                       // Save student
+                      Student student = Student(
+                        name: name,
+                        email: email,
+                        mobile: mobile,
+                        course: _selectedCourse,
+                        uni: uni,
+                      );
+
+                      int result = await DatabaseHelper.instance.saveStudent(student);
+
+                      if( result > 0 ){
+                        print(result);
+                        Fluttertoast.showToast(msg: 'Record Saved', backgroundColor: Colors.green);
+                      }else{
+                        print(result);
+                        Fluttertoast.showToast(msg: 'Failed', backgroundColor: Colors.red);
+
+                      }
                     }
-
-
-                  }, child: const Text('Save')),
+                  },
+                  child: const Text('Save')),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: (){
-
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
                       return const StudentListScreen();
                     }));
-
-                  }, child: const Text('View All')),
-
+                  },
+                  child: const Text('View All')),
             ],
           ),
         ),
