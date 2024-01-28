@@ -8,6 +8,17 @@ This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
 
+<h2>Assignments</h2>
+- Validate Email, Mobile TextFields
+- Convert Uni TextField to DropDown with 10 universities
+- Redesign the Student Card widget with your own creativity
+- Upload project to github
+
+<h3>Note</h3>
+- Send screenshots of the screens
+
+
+
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
