@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:session11_sqlite_db/db/database_helper.dart';
+import 'package:session11_sqlite_db/models/student.dart';
 
 import '../utility/data_store.dart';
 
 class UpdateScreen extends StatefulWidget {
-  const UpdateScreen({super.key});
+  final Student student;
+
+  const UpdateScreen({super.key, required this.student});
 
   @override
   State<UpdateScreen> createState() => _UpdateScreenState();
 }
 
 class _UpdateScreenState extends State<UpdateScreen> {
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  late String name, email,mobile, uni;
+  late String name, email, mobile, uni;
   String _selectedCourse = courses[0];
+
+  @override
+  void initState() {
+    _selectedCourse = widget.student.course;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +37,14 @@ class _UpdateScreenState extends State<UpdateScreen> {
           key: formKey,
           child: ListView(
             children: [
-
               TextFormField(
+                initialValue: widget.student.name,
                 decoration: const InputDecoration(
                   hintText: 'Name',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -42,15 +52,17 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               TextFormField(
+                initialValue: widget.student.email,
                 decoration: const InputDecoration(
                   hintText: 'Email',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -58,14 +70,17 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
+              const SizedBox(
+                height: 16,
+              ),
               TextFormField(
+                initialValue: widget.student.mobile,
                 decoration: const InputDecoration(
                   hintText: 'Mobile',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -73,12 +88,13 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               DropdownButtonFormField(
                 value: _selectedCourse,
                 decoration: const InputDecoration(
-                  border:  OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                 ),
                 isExpanded: true,
                 onChanged: (value) {
@@ -98,8 +114,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     return null;
                   }
                 },
-                items: courses
-                    .map((String val) {
+                items: courses.map((String val) {
                   return DropdownMenuItem(
                     value: val,
                     child: Text(
@@ -108,14 +123,17 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   );
                 }).toList(),
               ),
-
-              const SizedBox(height: 16,),TextFormField(
+              const SizedBox(
+                height: 16,
+              ),
+              TextFormField(
+                initialValue: widget.student.uni,
                 decoration: const InputDecoration(
                   hintText: 'Uni',
                   border: OutlineInputBorder(),
                 ),
-                validator: (text){
-                  if( text == null || text.isEmpty){
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
                     return 'Please provide value';
                   }
 
@@ -123,24 +141,40 @@ class _UpdateScreenState extends State<UpdateScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: (){
+                  onPressed: () async{
+                    if (formKey.currentState!.validate()) {
+                      // Update student
 
-                    if( formKey.currentState!.validate()){
+                      Student student = Student(
+                        id: widget.student.id,
+                        name: name,
+                        email: email,
+                        mobile: mobile,
+                        course: _selectedCourse,
+                        uni: uni,
+                      );
 
-                      // Save student
+                      int result = await DatabaseHelper.instance.updateStudent(student);
+
+                      if( result > 0 ){
+                        Fluttertoast.showToast(msg: 'Record Updated', backgroundColor: Colors.green);
+
+                        Navigator.pop(context, true);
+                      }else{
+                        Fluttertoast.showToast(msg: 'Failed', backgroundColor: Colors.red);
+                      }
+
                     }
-
-
-                  }, child: const Text('Update')),
-
-
+                  },
+                  child: const Text('Update')),
             ],
           ),
         ),

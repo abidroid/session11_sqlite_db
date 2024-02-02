@@ -102,26 +102,36 @@ class DatabaseHelper {
   }
   //
   // // update
-  // Future<int> updateDog(Dog dog) async {
-  //   Database db = await instance.database;
-  //   int result = await db.update('tbl_dog', dog.toMap(), where: 'id=?', whereArgs: [dog.id]);
-  //   return result;
-  // }
-  //
-  // // read operation
-  // Future<List<Dog>> searchDog({required String name}) async {
-  //   List<Dog> dogs = [];
-  //
-  //   Database db = await instance.database;
-  //
-  //   // read data from table
-  //   List<Map<String, dynamic>> listMap = await db.query('tbl_dog', where: 'name like ?', whereArgs: ['%$name%']);
-  //
-  //   for (var dogMap in listMap) {
-  //     Dog dog = Dog.fromMap(dogMap);
-  //     dogs.add(dog);
-  //   }
-  //
-  //   return dogs;
-  // }
+  Future<int> updateStudent(Student student) async {
+    Database db = await instance.database;
+    int result = await db.update(tableStudent, student.toMap(), where: 'id=?', whereArgs: [student.id]);
+    return result;
+  }
+
+
+
+
+  // search operation
+  Future<List<Student>> searchStudents({required String name}) async {
+    List<Student> students = [];
+
+    Database db = await instance.database;
+
+    // read data from table
+    // we will get list of map
+    // wild card search
+    List<Map<String, dynamic>> listMap = await db.query(tableStudent, where: 'name like ?', whereArgs: ['%$name%']);
+
+    // List<Map<String, dynamic>> listOfStudents = await db.rawQuery('SELECT * from $tableStudent');
+
+    // converting map to object and then adding to the list
+    for (var studentMap in listMap) {
+      Student student = Student.fromMap(studentMap);
+      students.add(student);
+    }
+
+    //await Future.delayed(const Duration(seconds: 2));
+
+    return students;
+  }
 }

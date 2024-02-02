@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:session11_sqlite_db/db/database_helper.dart';
 import 'package:session11_sqlite_db/models/student.dart';
+import 'package:session11_sqlite_db/screens/search_student_screen.dart';
+import 'package:session11_sqlite_db/screens/update_screen.dart';
 import 'package:session11_sqlite_db/widgets/student_card_widget.dart';
 import 'package:session11_sqlite_db/widgets/student_item_info_widget.dart';
 import 'package:sqflite/sqflite.dart';
@@ -19,6 +21,15 @@ class _StudentListScreenState extends State<StudentListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student List'),
+        actions: [
+          IconButton(onPressed: (){
+
+            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return const SearchStudentScreen();
+            }));
+
+          }, icon: const Icon(Icons.search)),
+        ],
       ),
       body: FutureBuilder<List<Student>>(
         future: DatabaseHelper.instance.getAllStudents(),
@@ -74,7 +85,18 @@ class _StudentListScreenState extends State<StudentListScreen> {
                             );
                           });
                     },
-                    onUpdate: () {},
+                    onUpdate: () async {
+
+                      bool updated = await Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                        return UpdateScreen(student: student);
+                      }));
+
+                      if( updated){
+                        setState(() {
+
+                        });
+                      }
+                    },
                   );
                 });
           } else {
